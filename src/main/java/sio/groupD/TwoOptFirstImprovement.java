@@ -1,3 +1,7 @@
+/**
+ * Auteurs : Jeremiah Steiner et Simon Guggisberg
+ */
+
 package sio.groupD;
 
 import sio.tsp.TspImprovementHeuristic;
