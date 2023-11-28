@@ -44,15 +44,12 @@ public final class Main {
             data = TspData.fromFile("data/" + METADATA[6].name + ".dat");
             System.out.println("computing " + METADATA[6].name);
         } catch (Exception e) {
-
+            System.out.println("error reading file : " + e);
         }
 
         TspTour tour = CONSTRUCTIVE_ALGORITHMS[0].computeTour(data, 0);
         System.out.println("length before is " + tour.length());
         tour = IMPROVEMENT_ALGORITHMS[0].computeTour(tour);
         System.out.println("length after is " + tour.length());
-
-        // Exemple de lecture d'un jeu de données :
-        // TspData data = TspData.fromFile("data/att532.dat");
     }
 }
