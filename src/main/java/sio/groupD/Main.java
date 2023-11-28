@@ -35,7 +35,7 @@ public final class Main {
 
     public static void main(String[] args) {
         // TODO
-        //  - Implémentation des classes TwoOptBestImprovement et TwoOptFirstImprovement ;
+        //  - Implémentation des classes TwoOptBestImprovement;
         //  - Documentation abondante des classes comprenant :
         //    - la javadoc, avec auteurs et description des implémentations ;
         //    - des commentaires sur les différentes parties de vos algorithmes.
