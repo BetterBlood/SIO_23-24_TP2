@@ -16,7 +16,8 @@ public final class Main {
      * @param name          le nom d'un fichier contenant les données du problème
      * @param optimalLength la longueur optimale correspondant aux données du problème
      */
-    private record TspMetaData(String name, int optimalLength) { }
+    private record TspMetaData(String name, int optimalLength) {
+    }
 
     private static final int NS_2_MS = 1000000;
     private static final TspConstructiveHeuristic[] CONSTRUCTIVE_ALGORITHMS = {new RandomTour(), new NearestNeighbor(), new DoubleEndsNearestNeighbor()};
@@ -51,5 +52,9 @@ public final class Main {
         System.out.println("length before is " + tour.length());
         tour = IMPROVEMENT_ALGORITHMS[0].computeTour(tour);
         System.out.println("length after is " + tour.length());
+        for (int v : tour.tour()) {
+            System.out.print(v + " ");
+        }
+        System.out.println();
     }
 }

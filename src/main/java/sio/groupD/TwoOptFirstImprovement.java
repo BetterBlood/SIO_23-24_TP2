@@ -50,20 +50,36 @@ public final class TwoOptFirstImprovement implements TspImprovementHeuristic {
                 if (tour[j] == tour[(i + 1) % nbCities]) {
                     continue;
                 }
-                System.out.format("%d and %d are valid cases !\n", i, j);
 
                 int previousDistance = utils.getDistanceModulo(i) + utils.getDistanceModulo(j);
                 int newDistance = utils.getDistance(i, j) + utils.getDistanceModulo(i + 1, j + 1);
                 if (newDistance < previousDistance) {
-                    System.out.println("swap !");
+                    System.out.format("swap indexes %d and %d\n", i, j);
+                    System.out.print("before swap : ");
+                    for (int a : tour) {
+                        System.out.print(a + " ");
+                    }
+                    System.out.println();
+
+
+                    //TODO improve algorithm by swapping the smaller part only ? (i, j) = (j, i) but one may be smaller thus faster
+
                     // k must be offset by i + 1 to point at
                     // nbCities + i + j are the total of items to swap. if it is odd, the last iteration can be skipped.
-                    int totalSwap = (nbCities + i + j) / 2;
-                    for (int k = 0; k <= totalSwap; k++) {
-                        int tmp = tour[(k + i + 1) % nbCities];
-                        tour[(k + i + 1) % nbCities] = tour[(j - k) % nbCities];
-                        tour[(j - k) % nbCities] = tmp;
+                    int totalSwap = (nbCities - i + j) / 2;
+                    for (int k = 0; k < totalSwap; k++) {
+                        int indexI = (k + i + 1) % nbCities;
+                        int indexJ = (j - k + nbCities) % nbCities;
+                        int tmp = tour[indexI];
+                        tour[indexI] = tour[indexJ];
+                        tour[indexJ] = tmp;
                     }
+
+                    System.out.print("after swap : ");
+                    for (int a : tour) {
+                        System.out.print(a + " ");
+                    }
+                    System.out.println();
 
                     // Decrements length based on difference between previousDistance and newDistance
                     length -= previousDistance - newDistance;
