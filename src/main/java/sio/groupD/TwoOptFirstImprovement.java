@@ -10,9 +10,12 @@ import sio.tsp.TspTour;
 public final class TwoOptFirstImprovement implements TspImprovementHeuristic {
     private interface Utils {
         int getDistanceModulo(int i);
+
         int getDistanceModulo(int i, int j);
+
         int getDistance(int i, int j);
     }
+
     @Override
     public TspTour computeTour(TspTour tspTour) {
         /*
@@ -41,51 +44,42 @@ public final class TwoOptFirstImprovement implements TspImprovementHeuristic {
             }
         };
 
-        for (int i = 0; i < nbCities; i++) {
-            // We only iterate until i as to avoid the cases:
-            // - (j,i), which is equivalent to (i,j), which is useless
-            // - (i,i) which is useless
-            for (int j = 0; j < i; j++) {
-                // The special case (i, j = i + 1 ) is also useless as it shifts the direction of the turn and that's it
-                if (tour[j] == tour[(i + 1) % nbCities]) {
-                    continue;
-                }
-
-                int previousDistance = utils.getDistanceModulo(i) + utils.getDistanceModulo(j);
-                int newDistance = utils.getDistance(i, j) + utils.getDistanceModulo(i + 1, j + 1);
-                if (newDistance < previousDistance) {
-                    System.out.format("swap indexes %d and %d\n", i, j);
-                    System.out.print("before swap : ");
-                    for (int a : tour) {
-                        System.out.print(a + " ");
-                    }
-                    System.out.println();
-
-
-                    //TODO improve algorithm by swapping the smaller part only ? (i, j) = (j, i) but one may be smaller thus faster
-
-                    // k must be offset by i + 1 to point at
-                    // nbCities + i + j are the total of items to swap. if it is odd, the last iteration can be skipped.
-                    int totalSwap = (nbCities - i + j) / 2;
-                    for (int k = 0; k < totalSwap; k++) {
-                        int indexI = (k + i + 1) % nbCities;
-                        int indexJ = (j - k + nbCities) % nbCities;
-                        int tmp = tour[indexI];
-                        tour[indexI] = tour[indexJ];
-                        tour[indexJ] = tmp;
+        boolean hasSwapped;
+        do {
+            hasSwapped = false;
+            for (int i = 0; i < nbCities; i++) {
+                // We only iterate until i as to avoid the cases:
+                // (j,i) is equivalent to (i,j), which is useless
+                // (i,i) is useless
+                for (int j = 0; j < i; j++) {
+                    // (i, j = i + 1 ) is useless as it changes the direction of the turn and nothing else
+                    if (tour[j] == tour[(i + 1) % nbCities]) {
+                        continue;
                     }
 
-                    System.out.print("after swap : ");
-                    for (int a : tour) {
-                        System.out.print(a + " ");
-                    }
-                    System.out.println();
+                    int previousDistance = utils.getDistanceModulo(i) + utils.getDistanceModulo(j);
+                    int newDistance = utils.getDistance(i, j) + utils.getDistanceModulo(i + 1, j + 1);
+                    if (newDistance < previousDistance) {
+                        hasSwapped = true;
+                        System.out.format("swap indexes %d and %d\n", i, j);
 
-                    // Decrements length based on difference between previousDistance and newDistance
-                    length -= previousDistance - newDistance;
+                        // nbCities + i + j are the total of items to swap. if it is odd, the last iteration can be skipped.
+                        //TODO improve algorithm by swapping the smaller part only ? (i, j) = (j, i) but one may be smaller (less swaps) thus faster
+                        int totalSwap = (nbCities - i + j) / 2;
+                        for (int k = 0; k < totalSwap; k++) {
+                            int indexI = (k + i + 1) % nbCities;
+                            int indexJ = (j - k + nbCities) % nbCities;
+                            int tmp = tour[indexI];
+                            tour[indexI] = tour[indexJ];
+                            tour[indexJ] = tmp;
+                        }
+
+                        // Decrements length based on difference between previousDistance and newDistance
+                        length -= previousDistance - newDistance;
+                    }
                 }
             }
-        }
+        } while (hasSwapped);
 
         return new TspTour(tspTour.data(), tour, length);
     }
