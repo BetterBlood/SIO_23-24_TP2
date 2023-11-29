@@ -10,7 +10,8 @@ import sio.tsp.TspTour;
 public final class TwoOptFirstImprovement implements TspImprovementHeuristic {
     private interface Utils {
         int getPreviousDistance(int i, int j);
-        int getNewDistance(int i, int j);
+
+        int getSwappedDistance(int i, int j);
     }
 
     @Override
@@ -19,27 +20,27 @@ public final class TwoOptFirstImprovement implements TspImprovementHeuristic {
         int[] tour = tspTour.tour();
         long length = tspTour.length();
 
-       Utils utils = new Utils() {
-           private int getDistanceModulo(int i) {
-               return tspTour.data().getDistance(tour[i], tour[(i + 1) % nbCities]);
-           }
+        Utils utils = new Utils() {
+            private int getDistanceModulo(int i) {
+                return tspTour.data().getDistance(tour[i], tour[(i + 1) % nbCities]);
+            }
 
-           private int getDistanceModulo(int i, int j) {
-               return tspTour.data().getDistance(tour[i % nbCities], tour[j % nbCities]);
-           }
+            private int getDistanceModulo(int i, int j) {
+                return tspTour.data().getDistance(tour[i % nbCities], tour[j % nbCities]);
+            }
 
-           private int getDistance(int i, int j) {
-               return tspTour.data().getDistance(tour[i], tour[j]);
-           }
+            private int getDistance(int i, int j) {
+                return tspTour.data().getDistance(tour[i], tour[j]);
+            }
 
-           public int getPreviousDistance(int i, int j) {
-               return getDistanceModulo(i) + getDistanceModulo(j);
-           }
+            public int getPreviousDistance(int i, int j) {
+                return getDistanceModulo(i) + getDistanceModulo(j);
+            }
 
-           public int getNewDistance(int i, int j) {
-               return getDistance(i, j) + getDistanceModulo(i + 1, j + 1);
-           }
-       };
+            public int getSwappedDistance(int i, int j) {
+                return getDistance(i, j) + getDistanceModulo(i + 1, j + 1);
+            }
+        };
 
         boolean hasSwapped;
         do {
@@ -55,7 +56,7 @@ public final class TwoOptFirstImprovement implements TspImprovementHeuristic {
                     }
 
                     int previousDistance = utils.getPreviousDistance(i, j);
-                    int newDistance = utils.getNewDistance(i, j);
+                    int newDistance = utils.getSwappedDistance(i, j);
                     if (newDistance < previousDistance) {
                         hasSwapped = true;
 
