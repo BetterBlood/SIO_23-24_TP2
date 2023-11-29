@@ -20,7 +20,8 @@ public final class Main {
     }
 
     private static final int NS_2_MS = 1000000;
-    private static final TspConstructiveHeuristic[] CONSTRUCTIVE_ALGORITHMS = {new RandomTour(), new NearestNeighbor(), new DoubleEndsNearestNeighbor()};
+    private static final long SEED = 0x134B3BD;
+    private static final TspConstructiveHeuristic[] CONSTRUCTIVE_ALGORITHMS = {new RandomTour(SEED), new NearestNeighbor(), new DoubleEndsNearestNeighbor()};
     private static final TspImprovementHeuristic[] IMPROVEMENT_ALGORITHMS = {new TwoOptFirstImprovement(), new TwoOptBestImprovement()};
 
     private static final TspMetaData[] METADATA = {
@@ -50,7 +51,7 @@ public final class Main {
 
         TspTour tour = CONSTRUCTIVE_ALGORITHMS[0].computeTour(data, 0);
         System.out.println("length before is " + tour.length());
-        tour = IMPROVEMENT_ALGORITHMS[0].computeTour(tour);
+        tour = IMPROVEMENT_ALGORITHMS[1].computeTour(tour);
         System.out.println("length after is " + tour.length());
         for (int v : tour.tour()) {
             System.out.print(v + " ");
