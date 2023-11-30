@@ -23,13 +23,13 @@ public final class Main {
     private static final long SEED = 0x134B3BD;
     private static final int NB_TRIES = 10;
     private static final TspConstructiveHeuristic[] CONSTRUCTIVE_ALGORITHMS = {
-            //new RandomTour(SEED),
-            new NearestNeighbor(),
+            new RandomTour(SEED),
+            //new NearestNeighbor(),
             //new DoubleEndsNearestNeighbor(),
     };
     private static final TspImprovementHeuristic[] IMPROVEMENT_ALGORITHMS = {
-            new TwoOptFirstImprovement(),
-            //new TwoOptBestImprovement(),
+            //new TwoOptFirstImprovement(),
+            new TwoOptBestImprovement(),
     };
 
     private static final TspMetaData[] METADATA = {
@@ -62,11 +62,11 @@ public final class Main {
 
             for (TspConstructiveHeuristic constructiveAlgo : CONSTRUCTIVE_ALGORITHMS) {
                 for (TspImprovementHeuristic improvementAlgo : IMPROVEMENT_ALGORITHMS) {
-                    //for (int i = 0; i < NB_TRIES; i++)
+                    for (int i = 0; i < NB_TRIES; ++i)
                     {
-                        System.out.println("constructing with " + constructiveAlgo.getClass().getSimpleName());
-                        //System.out.println("constructing with " + constructiveAlgo.getClass().getSimpleName() + " index " + i);
-                        TspTour tour = constructiveAlgo.computeTour(data, 0);
+                        //System.out.println("constructing with " + constructiveAlgo.getClass().getSimpleName());
+                        System.out.println("constructing with " + constructiveAlgo.getClass().getSimpleName() + " index " + i);
+                        TspTour tour = constructiveAlgo.computeTour(data, i);
                         System.out.println("length is \t\t\t" + tour.length());
                         System.out.println("improving with " + improvementAlgo.getClass().getSimpleName());
                         tour = improvementAlgo.computeTour(tour);

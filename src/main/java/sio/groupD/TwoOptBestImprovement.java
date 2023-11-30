@@ -23,7 +23,7 @@ public final class TwoOptBestImprovement implements TspImprovementHeuristic {
         do {
             hasSwapped = false;
             int[] bestSwap = new int[2];
-            int bestDistanceGained = Integer.MAX_VALUE;
+            int bestDistanceGained = 0;
             utils.setTour(tour);
 
             for (int i = 1; i < nbCities; i++) {
@@ -37,10 +37,10 @@ public final class TwoOptBestImprovement implements TspImprovementHeuristic {
 
                     // Calculate the distance to gain from a swap (i,j). If it is a better improving swap than current best, we save it.
                     int distanceGained = utils.getGainedDistance(i, j);
-                    if (distanceGained >= bestDistanceGained || distanceGained <= 0) {
+                    if (distanceGained <= bestDistanceGained || distanceGained <= 0) {
                         continue;
                     }
-
+                    //if (i == 474 && j == 472) System.out.println("dist " + distanceGained);
                     hasSwapped = true;
                     bestSwap[0] = i;
                     bestSwap[1] = j;
@@ -49,6 +49,7 @@ public final class TwoOptBestImprovement implements TspImprovementHeuristic {
             }
 
             if (hasSwapped) {
+                //System.out.println("twoOptBest " + bestSwap[0] + " " + bestSwap[1]);
                 tour = utils.swap(bestSwap[0], bestSwap[1]);
                 length -= bestDistanceGained;
             }

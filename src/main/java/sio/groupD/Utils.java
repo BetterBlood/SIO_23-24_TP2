@@ -66,6 +66,7 @@ public class Utils {
      * @return whether the swap is useless, or not
      */
     public boolean isSwapUseless(int i, int j) {
+        //if (i == 474 && j == 472) System.out.println("???");
         return j == (i + 1) % nbCities;
     }
 
@@ -77,7 +78,7 @@ public class Utils {
      * @return the symmetric tour as an array of int
      */
     public int[] swap(int i, int j) {
-        int nbToSwap = nbCities - i + j;
+        int nbToSwap = nbCities - i + j; // pk pas i - j ? :
 
         // If the number of swaps to do (i, j) is bigger than (j, i), then we do the latter
         if (nbToSwap > i - j) {
@@ -85,7 +86,7 @@ public class Utils {
             int tmp = i;
             i = j;
             j = tmp;
-        }
+        }//*/
 
         /*
         System.out.println("before swap (" + i + ", " + j + ")");
@@ -105,7 +106,7 @@ public class Utils {
             int tmp = tour[indexI];
             tour[indexI] = tour[indexJ];
             tour[indexJ] = tmp;
-        }
+        }//*/
 
         /*
         System.out.println("after swap (" + i + ", " + j + ")");
@@ -114,6 +115,23 @@ public class Utils {
         }
         System.out.println();
         */
+        //System.out.println(nbCities + " " + i + " " + j);
+        /* TODO : check la proposition suivante que je pense être plus simple: */
+        // plus simple à comprendre + pas besoin de nbSwap mais nbCities doit être plus petit que la moitié de max int je pense
+        /*boolean normalSwap = i - j < nbCities - i + j;
+        System.out.println(normalSwap + " " + (i - j) + " " + (nbCities - i + j));
+        int incr = normalSwap ? 1 : -1;
+        int end = normalSwap ? 0 : nbCities;
+        while((i - j) * incr + end > 0) // (i - j dans un normal swap)
+        {
+            int sw = tour[(i+nbCities)%nbCities];
+            tour[(i+nbCities)%nbCities] = tour[(j+nbCities)%nbCities];
+            tour[(j+nbCities)%nbCities] = sw;
+            i -= incr;
+            j += incr;
+            //System.out.println(i + " " + j);
+        }//*/
+        /* fin */
 
         return tour;
     }

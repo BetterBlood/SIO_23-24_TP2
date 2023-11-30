@@ -42,7 +42,7 @@ public final class TwoOptFirstImprovement implements TspImprovementHeuristic {
                         continue;
                     }
 
-                    hasSwapped = true;
+                    hasSwapped = true; // ok pour la boucle while mais pas optimal pour la double boucle for je pense
                     tour = utils.swap(i, j);
                     length -= distanceGained;
 
@@ -51,7 +51,11 @@ public final class TwoOptFirstImprovement implements TspImprovementHeuristic {
                     }
 
                     // Break out of the second for loop
-                    break;
+                    //break;
+                    // TODO : pas sûr que se soit nécessaire en fait faut qu'on en discute ensemble mais techniquement
+                    // on a pas besoin de recommencer les deux boucles, c'est même en fait rare que cela soit utile
+                    // car le changement que l'on fait a peu de chance d'offrir une possibilité d'amélioration avant
+                    // l'endroit où on en est
                 }
 
                 // Break out of the first for loop
