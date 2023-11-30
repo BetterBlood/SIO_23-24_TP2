@@ -16,6 +16,9 @@ public final class TwoOptBestImprovement implements TspImprovementHeuristic {
         long length = tspTour.length();
         Utils utils = new Utils(tspTour);
 
+        // TODO store as a Stack all bestSwap/bestDistanceGained and then pop them all ?
+        // (except if one of them has been altered, meaning, its distanceGained no longer is equal to bestDistanceGained)
+
         boolean hasSwapped;
         do {
             hasSwapped = false;

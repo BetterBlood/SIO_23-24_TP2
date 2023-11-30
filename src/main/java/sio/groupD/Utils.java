@@ -57,14 +57,16 @@ public class Utils {
     }
 
     /**
-     * Checks that the swap (i,j) is not useless. The cases (i, j = i + 1) and (i = j + 1, j) are considered useless. Other special cases must be treated
+     * Checks that the swap (i,j) is not useless.
+     * The case (i, j = i + 1) is considered useless.
+     * Other special cases must be treated accordingly.
      *
      * @param i must be larger than j
      * @param j must be smaller than i
      * @return whether the swap is useless, or not
      */
     public boolean isSwapUseless(int i, int j) {
-        return tour[j] == tour[(i + 1) % nbCities] || tour[i] == tour[(j + 1)];
+        return j == (i + 1) % nbCities;
     }
 
     /**
@@ -85,6 +87,15 @@ public class Utils {
             j = tmp;
         }
 
+        /*
+        System.out.println("before swap (" + i + ", " + j + ")");
+        for (int a :
+                tour) {
+            System.out.print(a + " ");
+        }
+        System.out.println();
+        */
+
         // if it is odd, the last iteration can be skipped
         //TODO have another function variant with no modulo as to be faster in cases of (j,i) ? modulo is only needed for (i,j)
         int totalSwap = nbToSwap / 2;
@@ -95,6 +106,14 @@ public class Utils {
             tour[indexI] = tour[indexJ];
             tour[indexJ] = tmp;
         }
+
+        /*
+        System.out.println("after swap (" + i + ", " + j + ")");
+        for (int a : tour) {
+            System.out.print(a + " ");
+        }
+        System.out.println();
+        */
 
         return tour;
     }

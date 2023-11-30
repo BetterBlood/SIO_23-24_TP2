@@ -23,25 +23,25 @@ public final class Main {
     private static final long SEED = 0x134B3BD;
     private static final int NB_TRIES = 10;
     private static final TspConstructiveHeuristic[] CONSTRUCTIVE_ALGORITHMS = {
-            new RandomTour(SEED),
+            //new RandomTour(SEED),
             new NearestNeighbor(),
             //new DoubleEndsNearestNeighbor(),
     };
     private static final TspImprovementHeuristic[] IMPROVEMENT_ALGORITHMS = {
             new TwoOptFirstImprovement(),
-            new TwoOptBestImprovement(),
+            //new TwoOptBestImprovement(),
     };
 
     private static final TspMetaData[] METADATA = {
             new TspMetaData("att532", 86729),
-            new TspMetaData("rat575", 6773),
+            /*new TspMetaData("rat575", 6773),
             new TspMetaData("u574", 36905),
             /*
             new TspMetaData("rl1889", 316536),
             new TspMetaData("u1817", 57201),
             new TspMetaData("vm1748", 336556),
             */
-            new TspMetaData("carre", 396),
+            //new TspMetaData("carre", 396),
     };
 
     public static void main(String[] args) {
