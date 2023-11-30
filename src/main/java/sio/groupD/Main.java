@@ -21,10 +21,11 @@ public final class Main {
 
     private static final int NS_2_MS = 1000000;
     private static final long SEED = 0x134B3BD;
+    private static final int NB_TRIES = 10;
     private static final TspConstructiveHeuristic[] CONSTRUCTIVE_ALGORITHMS = {
-            /* new RandomTour(SEED), */
+            new RandomTour(SEED),
             new NearestNeighbor(),
-            /* new DoubleEndsNearestNeighbor(), */
+            //new DoubleEndsNearestNeighbor(),
     };
     private static final TspImprovementHeuristic[] IMPROVEMENT_ALGORITHMS = {
             new TwoOptFirstImprovement(),
@@ -59,17 +60,19 @@ public final class Main {
                 System.out.println("error reading file : " + e);
             }
 
-            if (data.getNumberOfCities() > 1000) {
-                continue;
-            }
-
             for (TspConstructiveHeuristic constructiveAlgo : CONSTRUCTIVE_ALGORITHMS) {
                 for (TspImprovementHeuristic improvementAlgo : IMPROVEMENT_ALGORITHMS) {
-                    System.out.println("constructing with " + constructiveAlgo.getClass().getSimpleName());
-                    TspTour tour = constructiveAlgo.computeTour(data, 0);
-                    System.out.println("improving with " + improvementAlgo.getClass().getSimpleName());
-                    tour = improvementAlgo.computeTour(tour);
-                    System.out.println("length is " + tour.length());
+                    //for (int i = 0; i < NB_TRIES; i++)
+                    {
+                        System.out.println("constructing with " + constructiveAlgo.getClass().getSimpleName());
+                        //System.out.println("constructing with " + constructiveAlgo.getClass().getSimpleName() + " index " + i);
+                        TspTour tour = constructiveAlgo.computeTour(data, 0);
+                        System.out.println("length is \t\t\t" + tour.length());
+                        System.out.println("improving with " + improvementAlgo.getClass().getSimpleName());
+                        tour = improvementAlgo.computeTour(tour);
+                        System.out.println("length is \t\t\t" + tour.length());
+                        System.out.println("length should be \t" + metaData.optimalLength);
+                    }
                 }
             }
 

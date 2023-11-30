@@ -23,14 +23,12 @@ public final class TwoOptBestImprovement implements TspImprovementHeuristic {
             int bestDistanceGained = Integer.MAX_VALUE;
             utils.setTour(tour);
 
-            // TODO refactor
-            for (int i = 0; i < nbCities; i++) {
+            for (int i = 1; i < nbCities; i++) {
                 // We only iterate until i as to avoid the cases:
-                // (j,i) is equivalent to (i,j), which is uselesss
-                // (i,i) is useless
+                // - (j,i) is equivalent to (i,j)
+                // - (i,i) causes errors
                 for (int j = 0; j < i; j++) {
-                    // (i, j = i + 1 ) is useless as it changes the direction of the turn and nothing else
-                    if (tour[j] == tour[(i + 1) % nbCities]) {
+                    if (utils.isSwapUseless(i, j)) {
                         continue;
                     }
 
@@ -48,9 +46,7 @@ public final class TwoOptBestImprovement implements TspImprovementHeuristic {
             }
 
             if (hasSwapped) {
-                tour = utils.swapAllBetween(bestSwap[0], bestSwap[1]);
-
-                // Decrements length based on difference between previousDistance and newDistance
+                tour = utils.swap(bestSwap[0], bestSwap[1]);
                 length -= bestDistanceGained;
             }
         } while (hasSwapped);
