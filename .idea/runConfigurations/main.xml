@@ -3,7 +3,7 @@
     <option name="ALTERNATIVE_JRE_PATH" value="temurin-17" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="MAIN_CLASS_NAME" value="sio.groupD.Main" />
-    <module name="SIO_23-24_TP2" />
+    <module name="lab2" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

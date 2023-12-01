@@ -78,10 +78,10 @@ public class Utils {
      * @return the symmetric tour as an array of int
      */
     public int[] swap(int i, int j) {
-        int nbToSwap = nbCities - i + j; // pk pas i - j ? :
+        //int nbToSwap = nbCities - i + j; // pk pas i - j ? :
 
         // If the number of swaps to do (i, j) is bigger than (j, i), then we do the latter
-        if (nbToSwap > i - j) {
+        /*if (nbToSwap > i - j) {
             nbToSwap = i - j;
             int tmp = i;
             i = j;
@@ -99,7 +99,7 @@ public class Utils {
 
         // if it is odd, the last iteration can be skipped
         //TODO have another function variant with no modulo as to be faster in cases of (j,i) ? modulo is only needed for (i,j)
-        int totalSwap = nbToSwap / 2;
+        /*int totalSwap = nbToSwap / 2;
         for (int k = 0; k < totalSwap; k++) {
             int indexI = (k + i + 1) % nbCities;
             int indexJ = (j - k + nbCities) % nbCities;
@@ -118,10 +118,12 @@ public class Utils {
         //System.out.println(nbCities + " " + i + " " + j);
         /* TODO : check la proposition suivante que je pense être plus simple: */
         // plus simple à comprendre + pas besoin de nbSwap mais nbCities doit être plus petit que la moitié de max int je pense
-        /*boolean normalSwap = i - j < nbCities - i + j;
-        System.out.println(normalSwap + " " + (i - j) + " " + (nbCities - i + j));
+        boolean normalSwap = i - j < nbCities - i + j;
+        //System.out.println(normalSwap + " " + (i - j) + " " + (nbCities - i + j));
         int incr = normalSwap ? 1 : -1;
         int end = normalSwap ? 0 : nbCities;
+        j = normalSwap ? j + 1 : j;
+        i = normalSwap ? i : i + 1;
         while((i - j) * incr + end > 0) // (i - j dans un normal swap)
         {
             int sw = tour[(i+nbCities)%nbCities];
