@@ -33,20 +33,32 @@ public final class DoubleEndsNearestNeighbor implements TspConstructiveHeuristic
     @Override
     public TspTour computeTour(TspData data, int startCityIndex) {
         Init(data.getNumberOfCities(), startCityIndex);
+        //System.out.println("dist : " + distTot);
 
         // Initialise t pour la première itération qui servira de queue d'array
-        TspDistanceToCity t = getClosestCity(data, false);
+        TspDistanceToCity t = getFirstCity(data);
         countVisited++;
-        addCityToTour(t);
+        orderVisited[lastCounter] = t.cityIndex;
+        citiesVisited[t.cityIndex] = true;
+        distTot += t.distance;
+        //System.out.println(data.getDistance(orderVisited[firstCounter], orderVisited[lastCounter]));
+        //System.out.println(t.cityIndex + ", " + firstCounter + ", " + lastCounter + ", d: " + distTot + ", " + t.distance + " ---");
 
         while (countVisited++ < numberOfCities) {
-            TspDistanceToCity v = getClosestCity(data);
-            addCityToTour(v);
+            t = getClosestCity(data);
+            addCityToTour(t);
+            //System.out.println(t.cityIndex + ", " + firstCounter + ", " + lastCounter + ", d: " + distTot + ", " + t.distance);
         }
 
         // Ajoute le chemin de retour à la distance totale
         distTot += data.getDistance(orderVisited[firstCounter], orderVisited[lastCounter]);
 
+        //System.out.println("distance totale : " + distTot);
+        for (int i = 0; i < numberOfCities; ++i)
+        {
+            //System.out.print(orderVisited[i] + " ");
+        }
+        //System.out.println();
         return new TspTour(data, orderVisited, distTot);
     }
 
@@ -77,18 +89,30 @@ public final class DoubleEndsNearestNeighbor implements TspConstructiveHeuristic
     private void addCityToTour(TspDistanceToCity t) {
         distTot += t.distance;
         citiesVisited[t.cityIndex] = true;
-        orderVisited[t.byFirst ? firstCounter + 1 : lastCounter - 1] = t.cityIndex;
-
-        if (t.byFirst) {
-            ++firstCounter;
-        } else {
-            --lastCounter;
-        }
+        orderVisited[t.byFirst ? ++firstCounter: --lastCounter] = t.cityIndex;
     }
 
     private TspDistanceToCity getClosestCity(TspData data, boolean byFirst) {
         TspDistanceToCity dist = getClosestCity(data);
         return new TspDistanceToCity(dist.distance, dist.cityIndex, byFirst);
+    }
+
+    private TspDistanceToCity getFirstCity(TspData data) {
+        int closestCity = -1;
+        int distMin = Integer.MAX_VALUE;
+
+        for (int i = 0; i < numberOfCities; ++i) {
+            if (citiesVisited[i]) {
+                continue;
+            }
+
+            int currentDistance = data.getDistance(i, orderVisited[firstCounter]);
+            if (distMin > currentDistance) {
+                closestCity = i;
+                distMin = currentDistance;
+            }
+        }
+        return new TspDistanceToCity(distMin, closestCity, false);
     }
 
     private TspDistanceToCity getClosestCity(TspData data) {
@@ -101,7 +125,8 @@ public final class DoubleEndsNearestNeighbor implements TspConstructiveHeuristic
                 continue;
             }
 
-            int currentDistance  = data.getDistance(i, orderVisited[firstCounter]);
+            int currentDistance = data.getDistance(i, orderVisited[firstCounter]);
+            //if (currentDistance == 140) System.out.println("i = " + i);
             if (distMin > currentDistance) {
                 closestCity = i;
                 distMin = currentDistance;
@@ -109,7 +134,8 @@ public final class DoubleEndsNearestNeighbor implements TspConstructiveHeuristic
             }
 
             // à distance égale, on préfère ajouter après s plutôt que t
-            currentDistance  = data.getDistance(i, orderVisited[lastCounter]);
+            currentDistance = data.getDistance(i, orderVisited[lastCounter]);
+            //if (currentDistance == 140) System.out.println("i = " + i);
             if (distMin > currentDistance) {
                 closestCity = i;
                 distMin = currentDistance;

@@ -24,24 +24,24 @@ public final class Main {
     private static final int NB_TRIES = 10;
     private static final TspConstructiveHeuristic[] CONSTRUCTIVE_ALGORITHMS = {
             new RandomTour(SEED),
-            //new NearestNeighbor(),
-            //new DoubleEndsNearestNeighbor(),
+            new NearestNeighbor(),
+            new DoubleEndsNearestNeighbor(),
     };
     private static final TspImprovementHeuristic[] IMPROVEMENT_ALGORITHMS = {
-            //new TwoOptFirstImprovement(),
+            new TwoOptFirstImprovement(),
             new TwoOptBestImprovement(),
     };
 
     private static final TspMetaData[] METADATA = {
-            new TspMetaData("att532", 86729),
-            /*new TspMetaData("rat575", 6773),
+            /*new TspMetaData("att532", 86729),
+            new TspMetaData("rat575", 6773),
             new TspMetaData("u574", 36905),
-            /*
+
             new TspMetaData("rl1889", 316536),
-            new TspMetaData("u1817", 57201),
-            new TspMetaData("vm1748", 336556),
-            */
-            //new TspMetaData("carre", 396),
+            new TspMetaData("u1817", 57201), // */
+            //new TspMetaData("vm1748", 336556)/*,
+
+            new TspMetaData("carre", 396) // */
     };
 
     public static void main(String[] args) {
@@ -66,7 +66,7 @@ public final class Main {
                     {
                         //System.out.println("constructing with " + constructiveAlgo.getClass().getSimpleName());
                         System.out.println("constructing with " + constructiveAlgo.getClass().getSimpleName() + " index " + i);
-                        TspTour tour = constructiveAlgo.computeTour(data, i);
+                        TspTour tour = constructiveAlgo.computeTour(data, i /**/);
                         System.out.println("length is \t\t\t" + tour.length());
                         System.out.println("improving with " + improvementAlgo.getClass().getSimpleName());
                         tour = improvementAlgo.computeTour(tour);
