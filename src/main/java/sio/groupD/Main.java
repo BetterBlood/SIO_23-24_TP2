@@ -80,7 +80,7 @@ public final class Main {
                         worstTime = times[k];
                     }
 
-                    if (times[k] < bestLength) {
+                    if (lengths[k] < bestLength) {
                         bestLength = lengths[k];
                     } else if (lengths[k] > worstLength) {
                         worstLength = lengths[k];
