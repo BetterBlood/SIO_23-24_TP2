@@ -8,15 +8,27 @@ import sio.tsp.*;
 
 public final class Main {
     /**
-     * Record contenant les méta informations pour un problème TSP
+     * Contains metadata for a TSP problem
      *
-     * @param name          le nom d'un fichier contenant les données du problème
-     * @param optimalLength la longueur optimale correspondant aux données du problème
+     * @param name          filename of a file containing the TSP data
+     * @param optimalLength optimal length for the TSP tour
      */
     private record TspMetaData(String name, int optimalLength) {
     }
 
-    private record TspObservation(float averageTime, long bestTime, long worstTime, float averageLength, long bestLength, long worstLength) {
+    /**
+     * Contains information on a TSP problem computed
+     *
+     * @param averageTime   average time taken to compute the TSP tour
+     * @param bestTime      shortest time taken to compute the TSP tour
+     * @param worstTime     longest time taken to compute the TSP tour
+     * @param averageLength average length computed for a TSP problem
+     * @param bestLength    shortest length computed for a TSP problem
+     * @param worstLength   longest length computed for a TSP problem
+     */
+    private record TspObservation(float averageTime, long bestTime,
+                                  long worstTime, float averageLength,
+                                  long bestLength, long worstLength) {
     }
 
     private static final int NS_2_MS = 1000000;
@@ -51,7 +63,11 @@ public final class Main {
                 long[] times = new long[NB_TRIES];
                 long[] lengths = new long[NB_TRIES];
                 for (int k = 0; k < NB_TRIES; ++k) {
-                    TspTour tour = CONSTRUCTIVE_ALGORITHMS[i].computeTour(data, k);
+                    TspTour tour = CONSTRUCTIVE_ALGORITHMS[0].computeTour(data, 0);
+                    if (CONSTRUCTIVE_ALGORITHMS[i].getClass() != RandomTour.class) {
+                        tour = CONSTRUCTIVE_ALGORITHMS[i].computeTour(data, tour.tour()[k]);
+                    }
+
                     long start = System.nanoTime();
                     try {
                         tour = IMPROVEMENT_ALGORITHMS[j].computeTour(tour);
@@ -64,6 +80,7 @@ public final class Main {
                     lengths[k] = tour.length();
                 }
 
+                // Computes average/best/worst time/length
                 float averageTime = 0;
                 long bestTime = Long.MAX_VALUE;
                 long worstTime = 0;
@@ -76,13 +93,14 @@ public final class Main {
 
                     if (times[k] < bestTime) {
                         bestTime = times[k];
-                    } else if (times[k] > worstTime) {
+                    }
+                    if (times[k] > worstTime) {
                         worstTime = times[k];
                     }
-
                     if (lengths[k] < bestLength) {
                         bestLength = lengths[k];
-                    } else if (lengths[k] > worstLength) {
+                    }
+                    if (lengths[k] > worstLength) {
                         worstLength = lengths[k];
                     }
                 }
@@ -96,41 +114,90 @@ public final class Main {
         return observations;
     }
 
-    private static void printObservations(String formatString, String file, TspObservation[][] observations) {
+    private static void printDetailedObservations(String formatString, TspMetaData metaData, TspObservation[][] observations) {
         for (int i = 0; i < CONSTRUCTIVE_ALGORITHMS.length; i++) {
             for (int j = 0; j < IMPROVEMENT_ALGORITHMS.length; j++) {
                 System.out.format(formatString,
-                        file,
+                        metaData.name,
                         CONSTRUCTIVE_ALGORITHMS[i].getClass().getSimpleName(),
                         IMPROVEMENT_ALGORITHMS[j].getClass().getSimpleName(),
                         observations[i][j].averageTime / NS_2_MS,
-                        observations[i][j].bestTime / NS_2_MS,
-                        observations[i][j].worstTime / NS_2_MS,
-                        observations[i][j].averageLength,
-                        observations[i][j].bestLength,
-                        observations[i][j].worstLength);
+                        (float) observations[i][j].bestTime / NS_2_MS,
+                        (float) observations[i][j].worstTime / NS_2_MS,
+                        observations[i][j].averageLength / metaData.optimalLength,
+                        (float) observations[i][j].bestLength / metaData.optimalLength,
+                        (float) observations[i][j].worstLength / metaData.optimalLength);
+            }
+        }
+    }
+
+    private static void printAggregatedObservations(String formatString, TspObservation[][][] observations) {
+        for (int j = 0; j < IMPROVEMENT_ALGORITHMS.length; j++) {
+            for (int i = 0; i < CONSTRUCTIVE_ALGORITHMS.length; i++) {
+                // Computes the average per metadata
+                float averageTime = 0;
+                float bestTime = 0;
+                float worstTime = 0;
+                float averageLength = 0;
+                float bestLength = 0;
+                float worstLength = 0;
+                for (int k = 0; k < METADATA.length; k++) {
+                    averageTime += observations[k][i][j].averageTime;
+                    bestTime += observations[k][i][j].bestTime;
+                    worstTime += observations[k][i][j].worstTime;
+                    averageLength += observations[k][i][j].averageLength / METADATA[k].optimalLength;
+                    bestLength += (float) observations[k][i][j].bestLength / METADATA[k].optimalLength;
+                    worstLength += (float) observations[k][i][j].worstLength / METADATA[k].optimalLength;
+                }
+
+                averageTime /= METADATA.length;
+                bestTime /= METADATA.length;
+                worstTime /= METADATA.length;
+                averageLength /= METADATA.length;
+                bestLength /= METADATA.length;
+                worstLength /= METADATA.length;
+
+                System.out.format(formatString,
+                        CONSTRUCTIVE_ALGORITHMS[i].getClass().getSimpleName(),
+                        IMPROVEMENT_ALGORITHMS[j].getClass().getSimpleName(),
+                        averageTime / NS_2_MS,
+                        bestTime / NS_2_MS,
+                        worstTime / NS_2_MS,
+                        averageLength,
+                        bestLength,
+                        worstLength);
             }
         }
     }
 
     public static void main(String[] args) {
-        String formatString = "| %-7s | %-25s | %-22s | %13f | %10d | %11d | %13f | %10d | %11d |%n";
-        String line =       "+---------+---------------------------+------------------------+---------------+------------+-------------+---------------+------------+-------------+%n";
-        System.out.format(  "| file    | constructiveAlgorithm     | improvementAlgorithm   |   averageTime |   bestTime |   worstTime | averageLength | bestLength | worstLength |%n");
+        String formatString = "| %-7s | %-25s | %-22s | %13f | %10f | %11f | %13f | %10f | %11f |%n";
+        String line = "+---------+---------------------------+------------------------+---------------+------------+-------------+---------------+------------+-------------+%n";
+        System.out.format("| file    | constructiveAlgorithm     | improvementAlgorithm   |   averageTime |   bestTime |   worstTime | averageLength | bestLength | worstLength |%n");
         System.out.format(line);
 
-        TspData data = null;
-        for (TspMetaData metaData : METADATA) {
+        TspObservation[][][] observations = new TspObservation[METADATA.length][CONSTRUCTIVE_ALGORITHMS.length][IMPROVEMENT_ALGORITHMS.length];
+        TspData data;
+        for (int i = 0; i < METADATA.length; i++) {
             try {
-                data = TspData.fromFile("data/" + metaData.name + ".dat");
+                data = TspData.fromFile("data/" + METADATA[i].name + ".dat");
             } catch (Exception e) {
                 System.out.println("error reading file : " + e);
+                return;
             }
 
-            TspObservation[][] observations = computeObservations(data);
-            printObservations(formatString, metaData.name, observations);
+            observations[i] = computeObservations(data);
+            printDetailedObservations(formatString, METADATA[i], observations[i]);
         }
-
         System.out.format(line);
+        System.out.println();
+
+        formatString = "| %-25s | %-22s | %13f | %10f | %11f | %13f | %10f | %11f |%n";
+        line = "+---------------------------+------------------------+---------------+------------+-------------+---------------+------------+-------------+%n";
+        System.out.format("| constructiveAlgorithm     | improvementAlgorithm   |   averageTime |   bestTime |   worstTime | averageLength | bestLength | worstLength |%n");
+        System.out.format(line);
+        printAggregatedObservations(formatString, observations);
+        System.out.format(line);
+        System.out.println();
     }
 }
