@@ -17,7 +17,7 @@
 
 Au vu des résultats ci-dessous, il est évident que :
 - l'algorithme constructif RandomTour est suboptimal, entraînant considérables délais pour de grandes tournées avec BestImprovement
-- en terme de temps d'exécution, l'algorithme First Improvement est nettement préférable par rapport à Best Improvement. On observe un temps environ 10 fois plus rapide que Best Improvement.
+- en terme de temps d'exécution, l'algorithme First Improvement est nettement préférable par rapport à Best Improvement. On observe un temps environ 20 fois plus rapide que Best Improvement.
 - en terme de longueurs de tournées, l'algorithme Best Improvement est légèrement préférable par rapport à First Improvement. On observe une amélioration de longueur d'environ 3% par rapport à First Improvement.
 - le choix de l'algorithme constructif n'influe pas de manière notable le temps de calculs de l'algorithme amélioratif ni la longueur trouvée.
 
