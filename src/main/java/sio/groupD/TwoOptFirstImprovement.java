@@ -37,8 +37,8 @@ public final class TwoOptFirstImprovement implements TspImprovementHeuristic {
             hasSwapped = false;
             tspUtils.setTour(tour);
 
-            // Iteration starts at 1 as the case of 0 does not enter the second for loop
-            for (int i = 1; i < nbCities; i++) {
+            // Iteration starts at 2 as the cases of 0 and 1 do not enter the second for loop
+            for (int i = 2; i < nbCities; i++) {
                 // We only iterate until i as to avoid the cases:
                 // - (j,i) is equivalent to (i,j)
                 // - (i,i) causes errors

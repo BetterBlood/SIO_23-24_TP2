@@ -39,7 +39,8 @@ public final class TwoOptBestImprovement implements TspImprovementHeuristic {
             int bestDistanceGained = 0;
             tspUtils.setTour(tour);
 
-            for (int i = 1; i < nbCities; i++) {
+            // Iteration starts at 2 as the cases of 0 and 1 do not enter the second for loop
+            for (int i = 2; i < nbCities; i++) {
                 // We only iterate until i as to avoid the cases:
                 // - (j,i) is equivalent to (i,j)
                 // - (i,i) causes errors

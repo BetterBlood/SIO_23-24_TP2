@@ -45,13 +45,13 @@ public final class Main {
     };
 
     private static final TspMetaData[] METADATA = {
+            //new TspMetaData("carre", 396),
             new TspMetaData("att532", 86729),
             new TspMetaData("rat575", 6773),
             new TspMetaData("u574", 36905),
             new TspMetaData("rl1889", 316536),
             new TspMetaData("u1817", 57201),
-            new TspMetaData("vm1748", 336556),
-            //new TspMetaData("carre", 396)
+            new TspMetaData("vm1748", 336556)
     };
 
     private static TspObservation[][] computeObservations(TspData data) {
@@ -190,9 +190,9 @@ public final class Main {
         System.out.format(line);
         System.out.println();
 
-        formatString = "| %-25s | %-22s | %13f | %10f | %11f | %13f | %10f | %11f |%n";
-        line = "+---------------------------+------------------------+---------------+------------+-------------+---------------+------------+-------------+%n";
-        System.out.format("| constructiveAlgorithm     | improvementAlgorithm   |   averageTime |   bestTime |   worstTime | averageLength | bestLength | worstLength |%n");
+        formatString = "| %-25s | %-22s | %13f | %13f | %13f | %13f | %10f | %11f |%n";
+        line = "+---------------------------+------------------------+---------------+--------------+--------------+---------------+------------+-------------+%n";
+        System.out.format("| constructiveAlgorithm     | improvementAlgorithm   |   averageTime |     bestTime |    worstTime | averageLength | bestLength | worstLength |%n");
         System.out.format(line);
         printAggregatedObservations(formatString, observations);
         System.out.format(line);
