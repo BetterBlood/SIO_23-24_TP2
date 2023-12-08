@@ -18,7 +18,6 @@ public final class TwoOptBestImprovement implements TspImprovementHeuristic {
      * <p>No guarantee is given as to the optimality of the resulting tour.</p>
      *
      * @param tspTour Existing
-     *
      * @return Solution found by the heuristic
      * @throws NullPointerException if {@code tour} is null
      */
@@ -44,14 +43,16 @@ public final class TwoOptBestImprovement implements TspImprovementHeuristic {
                 // We only iterate until i as to avoid the cases:
                 // - (j,i) is equivalent to (i,j)
                 // - (i,i) causes errors
-                for (int j = 0; j < i; j++) {
+                // Iteration ends at i - 1 as the swap (i = j + 1, i) is useless
+                int distanceI = tspUtils.getDistanceSafe(i);
+                for (int j = 0; j < i - 1; j++) {
                     if (tspUtils.isSwapUseless(i, j)) {
                         continue;
                     }
 
                     // Calculate the distance to gain from a swap (i,j).
                     // If it is a better improving swap than current best, we save it.
-                    int distanceGained = tspUtils.getGainedDistance(i, j);
+                    int distanceGained = distanceI + tspUtils.getGainedDistanceComplementary(i, j);
                     if (distanceGained <= bestDistanceGained) {
                         continue;
                     }

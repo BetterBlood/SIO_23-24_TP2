@@ -23,24 +23,41 @@ public class TspUtils {
         this.tspData = tspData;
     }
 
-    private int getDistanceModulo(int i) {
-        return tspData.getDistance(tour[i], tour[(i + 1) % nbCities]);
-    }
-
-    private int getDistanceModulo(int i, int j) {
-        return tspData.getDistance(tour[i % nbCities], tour[j % nbCities]);
-    }
-
     private int getDistance(int i, int j) {
         return tspData.getDistance(tour[i], tour[j]);
     }
 
-    private int getPreviousDistance(int i, int j) {
-        return getDistanceModulo(i) + getDistanceModulo(j);
+    /**
+     * Computes the distance [i, i + 1] while applying modulo
+     *
+     * @param i the index of a city whose distance with i + 1 is computed
+     * @return the distance [i, i + 1]
+     */
+    public int getDistanceSafe(int i) {
+        return getDistance(i, (i + 1) % nbCities);
     }
 
-    private int getSwappedDistance(int i, int j) {
-        return getDistance(i, j) + getDistanceModulo(i + 1, j + 1);
+    /**
+     * Computes the distance [i, i + 1] without applying modulo for better performances
+     * Make sure i is not equal to tour.length - 1 else it will crash
+     *
+     * @param i the index of a city whose distance with i + 1 is computed
+     * @return the distance [i, i + 1]
+     */
+    public int getDistanceUnsafe(int i) {
+        return getDistance(i, i + 1);
+    }
+
+    /**
+     * Computes the complementary distance gained by a swap (i, j)
+     * Make sure j is not equal to tour.length - 1 else it will crash
+     *
+     * @param i the index of a city whose distance [i, i + 1] is already computed
+     * @param j the index of a city whose distance with i remains to be computed
+     * @return the distance gained by a swap (i, j) minus the distance [i, i + 1]
+     */
+    public int getGainedDistanceComplementary(int i, int j) {
+        return getDistanceUnsafe(j) - (getDistance(i, j) + getDistance((i + 1) % nbCities, j + 1));
     }
 
     /**
@@ -52,17 +69,6 @@ public class TspUtils {
     public void setTour(int[] tour) {
         this.tour = tour;
         this.nbCities = tour.length;
-    }
-
-    /**
-     * Gets the distance gained by doing a swap (i,j)
-     *
-     * @param i must be larger than j
-     * @param j must be smaller than i
-     * @return the distance gained by the swap. Can be negative, in this case this is not an improving swap
-     */
-    public int getGainedDistance(int i, int j) {
-        return getPreviousDistance(i, j) - getSwappedDistance(i, j);
     }
 
     /**
@@ -94,14 +100,13 @@ public class TspUtils {
         i = normalSwap ? i : i + 1;
 
         while (incr * (i - j) + end > 0) {
-            int sw = tour[(i + nbCities) % nbCities];
+            int tmp = tour[(i + nbCities) % nbCities];
             tour[(i + nbCities) % nbCities] = tour[(j + nbCities) % nbCities];
-            tour[(j + nbCities) % nbCities] = sw;
+            tour[(j + nbCities) % nbCities] = tmp;
             i -= incr;
             j += incr;
         }
 
         return tour;
     }
-
 }

@@ -35,7 +35,7 @@ public final class Main {
     private static final long SEED = 0x134B3BD;
     private static final int NB_TRIES = 10;
     private static final TspConstructiveHeuristic[] CONSTRUCTIVE_ALGORITHMS = {
-            //new RandomTour(SEED),
+            new RandomTour(SEED),
             new NearestNeighbor(),
             new DoubleEndsNearestNeighbor(),
     };
@@ -48,12 +48,10 @@ public final class Main {
             new TspMetaData("att532", 86729),
             new TspMetaData("rat575", 6773),
             new TspMetaData("u574", 36905),
-            /*
             new TspMetaData("rl1889", 316536),
             new TspMetaData("u1817", 57201),
             new TspMetaData("vm1748", 336556),
-            */
-            new TspMetaData("carre", 396)
+            //new TspMetaData("carre", 396)
     };
 
     private static TspObservation[][] computeObservations(TspData data) {
@@ -171,9 +169,9 @@ public final class Main {
     }
 
     public static void main(String[] args) {
-        String formatString = "| %-7s | %-25s | %-22s | %13f | %10f | %11f | %13f | %10f | %11f |%n";
-        String line = "+---------+---------------------------+------------------------+---------------+------------+-------------+---------------+------------+-------------+%n";
-        System.out.format("| file    | constructiveAlgorithm     | improvementAlgorithm   |   averageTime |   bestTime |   worstTime | averageLength | bestLength | worstLength |%n");
+        String formatString = "| %-7s | %-25s | %-22s | %14f | %14f | %14f | %13f | %10f | %11f |%n";
+        String line = "+---------+---------------------------+------------------------+----------------+----------------+----------------+---------------+------------+-------------+%n";
+        System.out.format("| file    | constructiveAlgorithm     | improvementAlgorithm   |    averageTime |       bestTime |      worstTime | averageLength | bestLength | worstLength |%n");
         System.out.format(line);
 
         TspObservation[][][] observations = new TspObservation[METADATA.length][CONSTRUCTIVE_ALGORITHMS.length][IMPROVEMENT_ALGORITHMS.length];
