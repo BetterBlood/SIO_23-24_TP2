@@ -7,11 +7,14 @@
   - l'itération j = i cause des erreurs
   - un swap (i, j) est équivalent, pour une tournée symmétrique, à un swap (j, i)
   - l'itération j = i - 1 ne sert à rien car cela revient à j + 1 = i
-- ne pas itérer si i + 1 = j : ne sert à rien
+- cas i + 1 = j :
+  - Dans le cas du First Improvement : l'itération est interrompue
+  - Dans le cas du Best Improvement : il n'y a pas de vérification de cette condition car, après avoir testé de manière empirique, les temps obtenus étaient meilleurs sans cette vérification
 - enregistrer en mémoire la distance [i, i + 1] pour ne la calculer qu'une fois par i et non pas j fois
   - dans le cas du first improvement cela demande un recalcul de la distance [i, i + 1] si un swap est effectué
+- enregistrer en mémoire i + 1 car un calcul de modulo est effectué et ceci peut être fait une seule fois par i plutôt que j fois par i
 - puisque le swap (i, j) est équivalent à un swap (j, i) seul celui-ci demandant le moins de swaps d'éléments est effectué
-- certains calculs requiérant des opérations modulo ne sont exécutés que si il est vraiment requis d'utiliser le modulo. Cela rend le code plus obtus à comprendre malheureusement.
+- seuls les calculs de distance requérant des modulos utilisent ceux-ci
 
 ## Discussion des résultats
 
@@ -33,6 +36,8 @@ Ainsi, une tournée 1,1 comme longueur est 1,1 fois plus longue que la tournée 
 
 De plus, le temps correspond au temps requis pour améliorer une tournée existante. 
 Le temps pour construire une tournée est considérée comme déjà traité lors du laboratoire précédent.
+
+TODO UPDATE OUTDATED DATA BY NEW ONE
 
 ```
 | file    | constructiveAlgorithm     | improvementAlgorithm   |    averageTime |       bestTime |      worstTime | averageLength | bestLength | worstLength |

@@ -45,15 +45,12 @@ public final class TwoOptBestImprovement implements TspImprovementHeuristic {
                 // - (j,i) is equivalent to (i,j)
                 // - (i,i) causes errors
                 // Iteration ends at i - 1 as the swap (i = j + 1, i) is useless
-                int distanceI = tspUtils.getDistanceSafe(i);
+                int nextI = (i + 1) % nbCities;
+                int distanceI = tspUtils.getDistance(i, nextI);
                 for (int j = 0; j < i - 1; ++j) {
-                    if (tspUtils.isSwapUseless(i, j)) {
-                        continue;
-                    }
-
-                    // Calculate the distance to gain from a swap (i,j).
+                    // Compute the distance to gain from a swap (i,j).
                     // If it is a better improving swap than current best, we save it.
-                    int distanceGained = distanceI + tspUtils.getGainedDistanceComplementary(i, j);
+                    int distanceGained = distanceI + tspUtils.getDistance(j, j + 1) - tspUtils.getDistance(i, j) - tspUtils.getDistance(nextI, j + 1);
                     if (distanceGained <= bestDistanceGained) {
                         continue;
                     }
