@@ -38,13 +38,13 @@ public final class TwoOptFirstImprovement implements TspImprovementHeuristic {
             tspUtils.setTour(tour);
 
             // Iteration starts at 2 as the cases of 0 and 1 do not enter the second for loop
-            for (int i = 2; i < nbCities; i++) {
+            for (int i = 2; i < nbCities; ++i) {
                 // We only iterate until i as to avoid the cases:
                 // - (j,i) is equivalent to (i,j)
                 // - (i,i) causes errors
                 // Iteration ends at i - 1 as the swap (i = j + 1, i) is useless
                 int distanceI = tspUtils.getDistanceSafe(i);
-                for (int j = 0; j < i - 1; j++) {
+                for (int j = 0; j < i - 1; ++j) {
                     if (tspUtils.isSwapUseless(i, j)) {
                         continue;
                     }
