@@ -191,8 +191,8 @@ public final class Main {
         System.out.println();
 
         formatString = "| %-25s | %-22s | %13f | %13f | %13f | %13f | %10f | %11f |%n";
-        line = "+---------------------------+------------------------+---------------+--------------+--------------+---------------+------------+-------------+%n";
-        System.out.format("| constructiveAlgorithm     | improvementAlgorithm   |   averageTime |     bestTime |    worstTime | averageLength | bestLength | worstLength |%n");
+        line =              "+---------------------------+------------------------+---------------+---------------+---------------+---------------+------------+-------------+%n";
+        System.out.format(  "| constructiveAlgorithm     | improvementAlgorithm   |   averageTime |      bestTime |     worstTime | averageLength | bestLength | worstLength |%n");
         System.out.format(line);
         printAggregatedObservations(formatString, observations);
         System.out.format(line);
