@@ -1,5 +1,7 @@
 # SIO_23-24_TP2
 
+par Jeremiah Steiner et Simon Guggisberg
+
 ## Améliorations
 
 - itérer i de 1 à nbCities - 1 : les itérations 0 et 1 ne servent à rien car les swaps sont inutiles 
@@ -26,6 +28,7 @@ Au vu des résultats ci-dessous, il est évident que :
 
 Pour ces raisons nous recommendons, dans un premier temps d'utiliser un algorithme constructif, le plus efficace le mieux c'est (RandomTour à proscrire).
 Puis d'utiliser un algorithm amélioratif performant.
+
 En raison de nos résultats nous recommandons FirstImprovement mais si la vitesse n'est pas une priorité, alors BestImprovement trouve un résultat plus proche de l'optimal.
 
 ## Résultats
@@ -36,8 +39,6 @@ Ainsi, une tournée 1.1 comme longueur est 1.1 fois plus longue que la tournée 
 
 De plus, le temps correspond au temps requis pour améliorer une tournée existante. 
 Le temps pour construire une tournée est considérée comme déjà traité lors du laboratoire précédent.
-
-TODO UPDATE OUTDATED DATA BY NEW ONE
 
 ```
 | file    | constructiveAlgorithm     | improvementAlgorithm   |    averageTime |       bestTime |      worstTime | averageLength | bestLength | worstLength |
